@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div>
+<b> YOUTUBE video link management system </b>
+</div>
+<br>
+<div>
+URL-Link:   <input id="link-name" name="url-link" type="text" placeholder="url-link"><br>
+Category:   <input id="category-name" name="category" type="text" placeholder="category(Ex. Horror, Action etc)"><br>
+<br>
+<span>
+<button id="create-button" type="button" onclick="addData()">Create</button>
+<button id="clear-button" type="button" onclick="clearData()">ClearAll</button>
+<!--button id="create-button1" type="button" onclick="myFuncAux()">Iterate</button-->
+</span>
+</div> 
+
+<h2>My Favourite Links</h2>
+<ul id="link-lists"> </ul>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.js" ></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.js"></script>
+<script src="code.js"></script>
+
+<script id="sample_template" type="mustache/sample-template">
+	<div>{{name}} is a {{description}}</div>
+	<button type="button">Play</button>
+	<button type="button">Delete</button>
+</script>
+
+</body>
+</html>

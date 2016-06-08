@@ -1,0 +1,14 @@
+exports.index = function(req, res) {
+  res.locals = {
+	title: [ { name: 'Title1', description: 'Horror'}, { name: 'Title2' , description: 'Thriller'}, { name: 'Title3' , description: 'Comedy' } ],
+  };
+  return res.render(
+    'index',
+    {
+      partials:
+      {
+        part: 'part',
+      }
+    }
+  );
+};

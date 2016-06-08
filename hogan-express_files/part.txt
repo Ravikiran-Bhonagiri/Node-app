@@ -1,0 +1,5 @@
+{{#title}}
+<h2>{{name}} is a {{description}}</h2>
+<button type="button">Play</button>
+<button type="button">Delete</button>
+{{/title}}

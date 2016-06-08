@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div>
+<h2> YOUTUBE video link management system </h2>
+</div>
+<br>
+<div>
+URL-Link:   <input id="link-name" name="url-link" type="text" placeholder="url-link"><br>
+Category:   <input id="category-name" name="category" type="text" placeholder="category(Ex. Horror, Action etc)"><br>
+<br>
+<span>
+<button id="create-button" type="button" onclick="addData()">Add</button>
+<button id="clear-button" type="button" onclick="clearData()">ClearAll</button>
+<button id="load-button" type="button" onclick="loadData()">LoadData</button>
+<!--button id="create-button1" type="button" onclick="myFuncAux()">Iterate</button-->
+</span>
+</div> 
+
+<h2>My Favourite Links</h2>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.js" ></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.js"></script>
+
+<ul id="link-lists">{{>part}}</ul>
+
+<!--script id="sample_template">
+	<h3> {{name}} is a {{description}}</h3>
+	<button type="button">Play</button>
+	<button type="button">Delete</button>
+</script-->
+
+<script>
+
+	var $lists = $("#link-lists") ;
+	console.log( $lists );
+	$lists.delegate( ".remove", "click", 
+	function(){
+		var $li = $(this).closest('li');
+		console.log( $(this).attr('data-id'));
+		$.ajax({
+			type: 'DELETE',
+			url: '/links/' + $(this).attr('data-id'),
+			success: function(){
+				$li.remove();
+			}
+		});
+	});
+	
+function loadData(){
+	$.get( '/links', function( result, status ){
+			//alert("status " + status + " result " + result);
+			//console.log(" loadData length " + result.length );
+			$('#link-lists').html('');
+			addToHTML( result);
+	});
+}
+	
+
+function addToHTML( result){
+
+	var appe ;
+			for( var i = 0; i < result.length ; i++){
+			appe = '<li>' + 
+						'<p> ' + result[i].name + ' is a ' + result[i].description + ' </p> ' + 
+						'<button type="button">Play</button> ' +
+						'<button data-id=' + '"' + result[i]._id + '"' + ' class="remove" type="button" >Delete</button> ' +
+					'</li> <br>';
+				$('#link-lists').append(appe);
+		}
+
+}
+	
+function addData(){
+	//var inStr = document.getElementById("link-name").value.trim();
+	var inStr = $("#link-name").val().trim();
+	console.log( "name " + inStr);
+	//var catgry = document.getElementById("category-name").value.trim();
+	var catgry = $("#category-name").val().trim();
+	console.log( "description " + catgry );
+	//alert(inStr);
+	if( inStr !== "" && catgry !== null){
+		myFunc(inStr, catgry);
+	} else {
+		alert('You have specified either null url-link or category');
+	}
+}
+
+function clearData(){
+	$('#link-lists').html('');
+	//getDB();
+}
+
+
+/*
+function getDB_while_loading(){
+	$.get( "/links", function( data ) {
+		console.log(data);
+		var template = document.getElementById('sample_template').innerHTML;
+		var obj = Mustache.render(template, data);
+		$('#link-lists').append(obj);
+	});
+}
+*/
+
+/*
+function myFuncAux(){
+   var ul = document.getElementById("link-lists");
+   var items = ul.getElementsByTagName("li");
+   for (var i = 0; i < items.length; ++i) {
+     alert(items[i].innerText); 
+   }
+}
+
+
+function myFunc1(data){
+   if( data === ""){
+     alert('input value is null');
+     return false;
+   }
+   var ul = document.getElementById("link-lists");
+   var items = ul.getElementsByTagName("li");
+   for (var i = 0; i < items.length; ++i) {
+     //alert(items[i].innerText);
+     if( items[i].innerText === data ){
+       alert('input value already exists');
+       return false;
+     }
+   }
+   return true;
+}
+*/
+
+function dumpJSONData( data ){
+	var template = document.getElementById('sample_template').innerHTML;
+	var obj = Mustache.render(template, data);
+    $('#link-lists').append(obj);
+}
+
+
+function myFunc(nam, desc){
+	
+	var data = {};
+	data.name = nam;
+	data.description = desc;
+	
+	$.post( '/links' , data , function( result, status ){
+		//alert( 'status ' + status );
+		//console.log(" add Data " + result);
+		$('#link-lists').html('');
+		addToHTML(result);
+});
+	
+	/*
+	console.log( data );
+	var appe = '<h3> ' + nam + ' is a ' + desc +' </h3> \
+				<button type="button">Play</button> \
+				<button type="button">Delete</button><br>'
+	//var template = document.getElementById('sample_template').innerHTML;
+	//var obj = Mustache.to_html(template, data);
+    $('#link-lists').append(appe);
+	*/
+}
+
+
+
+</script>
+
+</body>
+</html>
